@@ -1,0 +1,11 @@
+__pycache__/
+.DS_Store
+.ilml_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+*.egg-info/
+build/
+dist/
+examples/datafiles/
+node_modules/
