@@ -4,7 +4,6 @@ from abc import ABC, abstractmethod
 from collections.abc import Callable
 from typing import TYPE_CHECKING, Any
 
-import padelpy
 from rdkit.Chem.Descriptors import CalcMolDescriptors
 
 from ilml.memory import cache
@@ -15,8 +14,6 @@ if TYPE_CHECKING:
     from ilml.chemistry import Ion, IonicLiquid
 
 rdkit_calc_mol_descriptors = cache(CalcMolDescriptors)
-
-padelpy_from_smiles = cache(padelpy.from_smiles)
 
 ion_featurizers: dict[str, IonFeaturizer] = {}
 
@@ -51,12 +48,6 @@ class IonFeaturizer(ABC):
 class RDKitIonFeaturizer(IonFeaturizer):
     def _featurize(self, ion: Ion) -> dict[str, Any]:
         return rdkit_calc_mol_descriptors(ion.rdkit_mol)  # type: ignore[no-any-return]
-
-
-@register("PaDEL")
-class PaDELIonFeaturizer(IonFeaturizer):
-    def _featurize(self, ion: Ion) -> dict[str, Any]:
-        return padelpy_from_smiles(ion.smiles)  # type: ignore[no-any-return]
 
 
 class IonicLiquidFeaturizer:
