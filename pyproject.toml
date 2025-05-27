@@ -10,6 +10,7 @@ dependencies = [
   "ilthermopy>=1.1.1.1",
   "joblib>=1.5.0",
   "numpy>=2.2.5",
+  "padelpy>=0.1.16",
   "pandas>=2.2.3",
   "rdkit>=2024.9.6",
   "tqdm>=4.67.1",
