@@ -61,6 +61,23 @@ class ILMLDataset(ABC):
             ],
         ).reset_index("datapoint_id", drop=True)
 
+    def get_references(self) -> pd.DataFrame:
+        references = {}
+
+        for entry in self.entries:
+            ref = entry.ilt_entry.ref
+
+            references[entry.id] = ref.full
+
+        references_df = pd.DataFrame.from_dict(
+            references,
+            orient="index",
+            columns=["reference"],
+        )
+        references_df.index.name = "entry_id"
+
+        return references
+
     def _populate(self) -> None:
         ilt_entry_ids = self.get_ilt_entry_ids()
 
