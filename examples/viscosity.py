@@ -138,15 +138,33 @@ if __name__ == "__main__":
     # Get the data.
     data = dataset.get_data()
 
+    # For each ionic liquid get entry IDs.
+    entry_ids = pd.DataFrame.from_dict(
+        {
+            ionic_liquid_smiles: ",".join(
+                data.xs(ionic_liquid_smiles, level="ionic_liquid_smiles")
+                .index.get_level_values("entry_id")
+                .unique()
+                .to_list()
+            )
+            for ionic_liquid_smiles in data.index.get_level_values(
+                "ionic_liquid_smiles"
+            ).unique()
+        },
+        orient="index",
+        columns=["entry_ids"],
+    )
+
     # Group the data by ionic liquid and average.
     data = data.groupby(
         level=[
-            "entry_id",
             "ionic_liquid_smiles",
             "cation_family",
             "anion_family",
         ]
     ).mean()
+
+    data = data.join(entry_ids, on="ionic_liquid_smiles")
 
     # Featurize.
     if not DATAFILES_DIR.exists():
