@@ -194,6 +194,20 @@ if __name__ == "__main__":
             # Convert the features to a DataFrame.
             features = pd.DataFrame.from_dict(ionic_liquid_features, orient="index")
 
+            # Filter out fragment/count-type features.
+            features.drop(
+                columns=[
+                    col_name
+                    for col_name in features.columns
+                    if (
+                        col_name.startswith("fr_")
+                        or col_name.startswith("Num")
+                        or "Count" in col_name
+                    )
+                ],
+                inplace=True,
+            )
+
             # Merge the features with the data.
             design_table = data.join(features, on="ionic_liquid_smiles").dropna(axis=1)
 
